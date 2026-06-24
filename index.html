@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Records</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Base ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.15);
+      --text: #f0f2ff;
+      --muted: #8b90a8;
+      --accent: #6c63ff;
+      --accent2: #4f46e5;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --info: #3b82f6;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 0.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0 0.5rem;
+      margin-bottom: 6px;
+      margin-top: 1rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--muted);
+      transition: all 0.15s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item i {
+      font-size: 18px;
+    }
+
+    .nav-item:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .nav-item.active {
+      background: rgba(108, 99, 255, 0.18);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .nav-item .badge-count {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      padding-left: 0.5rem;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 240px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      background: rgba(15, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .topbar-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-ghost {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border2);
+    }
+
+    .btn-ghost:hover {
+      background: var(--surface);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-accent:hover {
+      background: var(--accent2);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+
+    /* ── Page sections ── */
+    .page {
+      display: none;
+      padding: 2rem;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Stats Grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.purple {
+      background: rgba(108, 99, 255, 0.18);
+      color: var(--accent);
+    }
+
+    .stat-icon.green {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success);
+    }
+
+    .stat-icon.blue {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--info);
+    }
+
+    .stat-icon.amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warn);
+    }
+
+    .stat-val {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── Form Card ── */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 780px;
+    }
+
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin: 1.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    input,
+    select,
+    textarea {
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 10px 12px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--muted);
+      opacity: 0.6;
+    }
+
+    select option {
+      background: var(--surface2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-actions {
+      margin-top: 1.75rem;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ── Search ── */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 17px;
+      pointer-events: none;
+    }
+
+    .search-wrap input {
+      padding-left: 38px;
+      width: 100%;
+    }
+
+    .filter-select {
+      min-width: 150px;
+    }
+
+    /* ── Employee Table ── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--surface2);
+    }
+
+    td {
+      padding: 13px 16px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .emp-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .emp-name {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .emp-email {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-intern {
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+    }
+
+    .badge-junior {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+    }
+
+    .badge-senior {
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+    }
+
+    .badge-manager {
+      background: rgba(108, 99, 255, 0.15);
+      color: #a78bfa;
+    }
+
+    .badge-director {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+    }
+
+    .badge-vp {
+      background: rgba(236, 72, 153, 0.12);
+      color: #f472b6;
+    }
+
+    .badge-clevel {
+      background: rgba(234, 179, 8, 0.15);
+      color: #facc15;
+    }
+
+    .td-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.12s;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .icon-btn:hover.view {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--info);
+    }
+
+    .icon-btn:hover.del {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+    }
+
+    /* ── Empty ── */
+    .empty {
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty i {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+      opacity: 0.35;
+    }
+
+    .empty p {
+      font-size: 14px;
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      animation: popIn 0.2s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: var(--text);
+    }
+
+    .detail-row {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      align-items: flex-start;
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-icon {
+      color: var(--muted);
+      font-size: 17px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .detail-key {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .detail-val {
+      font-weight: 500;
+    }
+
+    .modal-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 22px;
+      margin: 0 auto 1rem;
+    }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    #toast.success {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--success);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+    }
+
+    #toast.error {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .topbar {
+        padding: 1rem;
+      }
+
+      .page {
+        padding: 1rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-field.full {
+        grid-column: 1;
+      }
+
+      .hamburger {
+        display: flex !important;
+      }
+
+      table thead th:nth-child(3),
+      table thead th:nth-child(4),
+      table td:nth-child(3),
+      table td:nth-child(4) {
+        display: none;
+      }
+    }
+
+    .hamburger {
+      display: none;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      width: 36px;
+      height: 36px;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .overlay-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+    }
+
+    .overlay-bg.open {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><i class="ti ti-users-group"></i></div>
+      <div>
+        <div class="logo-text">EmpTrack</div>
+        <div class="logo-sub">HR Management</div>
+      </div>
+    </div>
+
+    <div class="nav-label">Main</div>
+    <button class="nav-item active" onclick="navigate('dashboard', this)">
+      <i class="ti ti-layout-dashboard"></i> Dashboard
+    </button>
+    <button class="nav-item" onclick="navigate('add', this)">
+      <i class="ti ti-user-plus"></i> Add Employee
+    </button>
+    <button class="nav-item" onclick="navigate('records', this)">
+      <i class="ti ti-table"></i> All Records
+      <span class="badge-count" id="nav-count">0</span>
+    </button>
+
+    <div class="nav-label">Manage</div>
+    <button class="nav-item" onclick="exportCSV()">
+      <i class="ti ti-download"></i> Export CSV
+    </button>
+    <button class="nav-item"
+      onclick="if(confirm('Delete ALL employee records? This cannot be undone.')) { employees=[]; save(); renderAll(); showToast('All records cleared.','error'); }">
+      <i class="ti ti-trash"></i> Clear All Data
+    </button>
+
+    <div class="sidebar-footer">
+      EmpTrack v1.0 &nbsp;·&nbsp; Data stored locally
+    </div>
+  </aside>
+
+  <div class="overlay-bg" id="overlay-bg" onclick="closeSidebar()"></div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+          <i class="ti ti-menu-2"></i>
+        </button>
+        <div>
+          <div class="topbar-title" id="page-title">Dashboard</div>
+          <div class="topbar-sub" id="page-sub">Overview of your workforce</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-accent" onclick="navigate('add', document.querySelector('.nav-item:nth-child(4)'))">
+          <i class="ti ti-plus"></i> Add Employee
+        </button>
+      </div>
+    </header>
+
+    <!-- Dashboard -->
+    <section class="page active" id="page-dashboard">
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex-wrap:wrap;">
+        <!-- Department Breakdown -->
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
+          <div style="font-size:14px;font-weight:600;margin-bottom:1rem;">By Department</div>
+          <div id="dept-breakdown"></div>
+        </div>
+        <!-- Rank Breakdown -->
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
+          <div style="font-size:14px;font-weight:600;margin-bottom:1rem;">By Work Rank</div>
+          <div id="rank-breakdown"></div>
+        </div>
+      </div>
+
+      <!-- Recent Employees -->
+      <div
+        style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-top:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div style="font-size:14px;font-weight:600;">Recent Additions</div>
+          <button class="btn btn-ghost" onclick="navigate('records', document.querySelectorAll('.nav-item')[2])">View
+            all <i class="ti ti-arrow-right" style="font-size:13px;"></i></button>
+        </div>
+        <div id="recent-list"></div>
+      </div>
+    </section>
+
+    <!-- Add Employee -->
+    <section class="page" id="page-add">
+      <div class="form-card">
+        <div class="form-section-title">Personal Information</div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-name">Full Name *</label>
+            <input type="text" id="f-name" placeholder="e.g. Priya Sharma" />
+          </div>
+          <div class="form-field">
+            <label for="f-age">Age *</label>
+            <input type="number" id="f-age" placeholder="e.g. 28" min="18" max="80" />
+          </div>
+          <div class="form-field">
+            <label for="f-email">Email Address</label>
+            <input type="email" id="f-email" placeholder="e.g. priya@company.com" />
+          </div>
+          <div class="form-field">
+            <label for="f-phone">Phone Number</label>
+            <input type="tel" id="f-phone" placeholder="e.g. +91 9876543210" />
+          </div>
+          <div class="form-field full">
+            <label for="f-addr">Home Address</label>
+            <textarea id="f-addr" rows="2" placeholder="Street, City, State, PIN Code"></textarea>
+          </div>
+        </div>
+
+        <div class="form-section-title">Work Information</div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-dept">Department *</label>
+            <input type="text" id="f-dept" placeholder="e.g. Engineering, HR, Finance" />
+          </div>
+          <div class="form-field">
+            <label for="f-rank">Work Rank *</label>
+            <select id="f-rank">
+              <option value="">Select rank…</option>
+              <option>Intern</option>
+              <option>Junior</option>
+              <option>Senior</option>
+              <option>Manager</option>
+              <option>Director</option>
+              <option>VP</option>
+              <option>C-Level</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-join">Joining Date</label>
+            <input type="date" id="f-join" />
+          </div>
+          <div class="form-field">
+            <label for="f-salary">Salary (₹ / month)</label>
+            <input type="number" id="f-salary" placeholder="e.g. 75000" />
+          </div>
+          <div class="form-field full">
+            <label for="f-notes">Additional Notes</label>
+            <textarea id="f-notes" rows="2" placeholder="Skills, certifications, emergency contact, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-accent" onclick="addEmployee()">
+            <i class="ti ti-device-floppy"></i> Save Employee
+          </button>
+          <button class="btn btn-ghost" onclick="clearForm()">
+            <i class="ti ti-x"></i> Clear
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- All Records -->
+    <section class="page" id="page-records">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-inp" placeholder="Search by name, email, department…" oninput="renderTable()" />
+        </div>
+        <select class="filter-select" id="filter-rank" onchange="renderTable()">
+          <option value="">All ranks</option>
+          <option>Intern</option>
+          <option>Junior</option>
+          <option>Senior</option>
+          <option>Manager</option>
+          <option>Director</option>
+          <option>VP</option>
+          <option>C-Level</option>
+        </select>
+        <select class="filter-select" id="filter-dept" onchange="renderTable()" style="min-width:130px;">
+          <option value="">All departments</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Department</th>
+              <th>Rank</th>
+              <th>Joined</th>
+              <th>Salary</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="emp-tbody"></tbody>
+        </table>
+      </div>
+      <div id="emp-empty" class="empty" style="display:none;">
+        <i class="ti ti-users"></i>
+        <p id="empty-msg">No employees yet. Add your first one!</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- View Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Employee Profile</h2>
+        <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div id="modal-body"></div>
+      <div style="margin-top:1.5rem;display:flex;justify-content:flex-end;">
+        <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <script>
+    /* ── Data ── */
+    let employees = JSON.parse(localStorage.getItem('emp_records') || '[]');
+
+    function save() {
+      localStorage.setItem('emp_records', JSON.stringify(employees));
+      document.getElementById('nav-count').textContent = employees.length;
+    }
+
+    /* ── Navigation ── */
+    const pages = { dashboard: 'page-dashboard', add: 'page-add', records: 'page-records' };
+    const pageMeta = {
+      dashboard: ['Dashboard', 'Overview of your workforce'],
+      add: ['Add Employee', 'Fill in the details below'],
+      records: ['All Records', 'Browse, search and manage employees']
+    };
+
+    function navigate(key, btn) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(pages[key]).classList.add('active');
+      if (btn) btn.classList.add('active');
+      document.getElementById('page-title').textContent = pageMeta[key][0];
+      document.getElementById('page-sub').textContent = pageMeta[key][1];
+      if (key === 'dashboard') renderDashboard();
+      if (key === 'records') { renderTable(); updateDeptFilter(); }
+      closeSidebar();
+    }
+
+    /* ── Sidebar toggle (mobile) ── */
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay-bg').classList.toggle('open');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay-bg').classList.remove('open');
+    }
+
+    /* ── Toast ── */
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = type + ' show';
+      setTimeout(() => { t.className = ''; }, 2800);
+    }
+
+    /* ── Helpers ── */
+    function initials(name) {
+      return name.trim().split(' ').slice(0, 2).map(w => w[0].toUpperCase()).join('');
+    }
+
+    const AVATAR_COLORS = [
+      ['#6c63ff', '#1a1452'], ['#22c55e', '#052e0f'], ['#3b82f6', '#0c244f'],
+      ['#f59e0b', '#3d2800'], ['#ec4899', '#3d0a23'], ['#14b8a6', '#042f2e']
+    ];
+    function avatarColor(name) {
+      const i = name.charCodeAt(0) % AVATAR_COLORS.length;
+      return AVATAR_COLORS[i];
+    }
+
+    function badgeClass(rank) {
+      const map = {
+        intern: 'badge-intern', junior: 'badge-junior', senior: 'badge-senior',
+        manager: 'badge-manager', director: 'badge-director', vp: 'badge-vp', 'c-level': 'badge-clevel'
+      };
+      return map[(rank || '').toLowerCase()] || 'badge-intern';
+    }
+
+    function fmtDate(d) {
+      if (!d) return '—';
+      return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    function fmtSalary(s) {
+      if (!s) return '—';
+      return '₹' + Number(s).toLocaleString('en-IN') + '/mo';
+    }
+
+    /* ── Add Employee ── */
+    function addEmployee() {
+      const name = document.getElementById('f-name').value.trim();
+      const age = document.getElementById('f-age').value.trim();
+      const email = document.getElementById('f-email').value.trim();
+      const phone = document.getElementById('f-phone').value.trim();
+      const addr = document.getElementById('f-addr').value.trim();
+      const dept = document.getElementById('f-dept').value.trim();
+      const rank = document.getElementById('f-rank').value;
+      const join = document.getElementById('f-join').value;
+      const salary = document.getElementById('f-salary').value.trim();
+      const notes = document.getElementById('f-notes').value.trim();
+
+      if (!name) { showToast('Name is required.', 'error'); return; }
+      if (!rank) { showToast('Work rank is required.', 'error'); return; }
+      if (!dept) { showToast('Department is required.', 'error'); return; }
+
+      employees.unshift({ id: Date.now(), name, age, email, phone, addr, dept, rank, join, salary, notes });
+      save();
+      showToast(`${name} added successfully!`);
+      clearForm();
+    }
+
+    function clearForm() {
+      ['f-name', 'f-age', 'f-email', 'f-phone', 'f-addr', 'f-dept', 'f-rank', 'f-join', 'f-salary', 'f-notes']
+        .forEach(id => { document.getElementById(id).value = ''; });
+    }
+
+    /* ── Delete ── */
+    function deleteEmployee(id) {
+      const emp = employees.find(e => e.id === id);
+      if (!confirm(`Remove ${emp ? emp.name : 'this employee'}? This cannot be undone.`)) return;
+      employees = employees.filter(e => e.id !== id);
+      save();
+      renderTable();
+      renderDashboard();
+      showToast('Employee removed.', 'error');
+    }
+
+    /* ── Modal ── */
+    function viewEmployee(id) {
+      const e = employees.find(e => e.id === id);
+      if (!e) return;
+      const [fg, bg] = avatarColor(e.name);
+      document.getElementById('modal-body').innerHTML = `
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <div class="modal-avatar" style="background:${bg};color:${fg};">${initials(e.name)}</div>
+        <div style="font-size:20px;font-weight:700;">${e.name}</div>
+        <div style="margin-top:6px;"><span class="badge ${badgeClass(e.rank)}">${e.rank}</span> &nbsp; <span style="font-size:13px;color:var(--muted);">${e.dept || ''}</span></div>
+      </div>
+      ${row('ti-cake', 'Age', e.age || '—')}
+      ${row('ti-mail', 'Email', e.email || '—')}
+      ${row('ti-phone', 'Phone', e.phone || '—')}
+      ${row('ti-map-pin', 'Address', e.addr || '—')}
+      ${row('ti-calendar', 'Joined', fmtDate(e.join))}
+      ${row('ti-currency-rupee', 'Salary', fmtSalary(e.salary))}
+      ${e.notes ? row('ti-notes', 'Notes', e.notes) : ''}
+    `;
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function row(icon, key, val) {
+      return `<div class="detail-row">
+      <i class="ti ${icon} detail-icon"></i>
+      <div><div class="detail-key">${key}</div><div class="detail-val">${val}</div></div>
+    </div>`;
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+    }
+
+    /* ── Table ── */
+    function renderTable() {
+      const q = (document.getElementById('search-inp').value || '').toLowerCase();
+      const rank = document.getElementById('filter-rank').value;
+      const dept = document.getElementById('filter-dept').value;
+
+      const filtered = employees.filter(e =>
+        (!q || e.name.toLowerCase().includes(q) || (e.email || '').toLowerCase().includes(q) || (e.dept || '').toLowerCase().includes(q)) &&
+        (!rank || e.rank === rank) &&
+        (!dept || e.dept === dept)
+      );
+
+      const tbody = document.getElementById('emp-tbody');
+      const empty = document.getElementById('emp-empty');
+
+      if (!filtered.length) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        document.getElementById('empty-msg').textContent =
+          employees.length ? 'No employees match your filters.' : 'No employees yet. Add your first one!';
+        return;
+      }
+      empty.style.display = 'none';
+
+      tbody.innerHTML = filtered.map(e => {
+        const [fg, bg] = avatarColor(e.name);
+        return `<tr>
+        <td>
+          <div class="emp-cell">
+            <div class="avatar" style="background:${bg};color:${fg};">${initials(e.name)}</div>
+            <div>
+              <div class="emp-name">${e.name}</div>
+              <div class="emp-email">${e.email || e.phone || '—'}</div>
+            </div>
+          </div>
+        </td>
+        <td style="color:var(--muted);font-size:13px;">${e.dept || '—'}</td>
+        <td><span class="badge ${badgeClass(e.rank)}">${e.rank}</span></td>
+        <td style="color:var(--muted);font-size:13px;">${fmtDate(e.join)}</td>
+        <td style="font-size:13px;">${fmtSalary(e.salary)}</td>
+        <td>
+          <div class="td-actions">
+            <button class="icon-btn view" title="View" onclick="viewEmployee(${e.id})"><i class="ti ti-eye"></i></button>
+            <button class="icon-btn del"  title="Delete" onclick="deleteEmployee(${e.id})"><i class="ti ti-trash"></i></button>
+          </div>
+        </td>
+      </tr>`;
+      }).join('');
+    }
+
+    function updateDeptFilter() {
+      const depts = [...new Set(employees.map(e => e.dept).filter(Boolean))].sort();
+      const sel = document.getElementById('filter-dept');
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">All departments</option>' +
+        depts.map(d => `<option${d === cur ? ' selected' : ''}>${d}</option>`).join('');
+    }
+
+    /* ── Dashboard ── */
+    function renderDashboard() {
+      const total = employees.length;
+      const depts = new Set(employees.filter(e => e.dept).map(e => e.dept)).size;
+      const mgrs = employees.filter(e => ['manager', 'director', 'vp', 'c-level'].includes((e.rank || '').toLowerCase())).length;
+      const avgAge = total ? Math.round(employees.filter(e => e.age).reduce((s, e) => s + Number(e.age), 0) / employees.filter(e => e.age).length) || 0 : 0;
+
+      document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon purple"><i class="ti ti-users"></i></div><div><div class="stat-val">${total}</div><div class="stat-label">Total Employees</div></div></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="ti ti-building"></i></div><div><div class="stat-val">${depts}</div><div class="stat-label">Departments</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="ti ti-briefcase"></i></div><div><div class="stat-val">${mgrs}</div><div class="stat-label">Managers & Above</div></div></div>
+      <div class="stat-card"><div class="stat-icon amber"><i class="ti ti-activity"></i></div><div><div class="stat-val">${avgAge || '—'}</div><div class="stat-label">Avg. Age</div></div></div>
+    `;
+
+      /* Department bars */
+      const deptMap = {};
+      employees.forEach(e => { if (e.dept) deptMap[e.dept] = (deptMap[e.dept] || 0) + 1; });
+      const deptEl = document.getElementById('dept-breakdown');
+      if (!Object.keys(deptMap).length) { deptEl.innerHTML = '<div style="color:var(--muted);font-size:13px;">No data yet.</div>'; }
+      else {
+        const max = Math.max(...Object.values(deptMap));
+        deptEl.innerHTML = Object.entries(deptMap).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([d, n]) => `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+            <span>${d}</span><span style="color:var(--muted);">${n}</span>
+          </div>
+          <div style="height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;">
+            <div style="height:100%;width:${Math.round(n / max * 100)}%;background:var(--accent);border-radius:4px;transition:width 0.4s;"></div>
+          </div>
+        </div>`).join('');
+      }
+
+      /* Rank bars */
+      const rankMap = {};
+      employees.forEach(e => { if (e.rank) rankMap[e.rank] = (rankMap[e.rank] || 0) + 1; });
+      const rankEl = document.getElementById('rank-breakdown');
+      if (!Object.keys(rankMap).length) { rankEl.innerHTML = '<div style="color:var(--muted);font-size:13px;">No data yet.</div>'; }
+      else {
+        const max2 = Math.max(...Object.values(rankMap));
+        rankEl.innerHTML = Object.entries(rankMap).sort((a, b) => b[1] - a[1]).map(([r, n]) => `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+            <span>${r}</span><span style="color:var(--muted);">${n}</span>
+          </div>
+          <div style="height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;">
+            <div style="height:100%;width:${Math.round(n / max2 * 100)}%;background:#22c55e;border-radius:4px;transition:width 0.4s;"></div>
+          </div>
+        </div>`).join('');
+      }
+
+      /* Recent */
+      const recent = employees.slice(0, 5);
+      const recentEl = document.getElementById('recent-list');
+      if (!recent.length) { recentEl.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:1rem 0;">No employees yet.</div>'; return; }
+      recentEl.innerHTML = recent.map(e => {
+        const [fg, bg] = avatarColor(e.name);
+        return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div class="avatar" style="background:${bg};color:${fg};width:36px;height:36px;font-size:12px;">${initials(e.name)}</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:500;">${e.name}</div>
+          <div style="font-size:12px;color:var(--muted);">${e.dept || '—'}</div>
+        </div>
+        <span class="badge ${badgeClass(e.rank)}">${e.rank}</span>
+      </div>`;
+      }).join('');
+    }
+
+    /* ── Export CSV ── */
+    function exportCSV() {
+      if (!employees.length) { showToast('No employees to export.', 'error'); return; }
+      const headers = ['Name', 'Age', 'Email', 'Phone', 'Address', 'Department', 'Rank', 'Joined', 'Salary', 'Notes'];
+      const rows = employees.map(e => [
+        e.name, e.age, e.email, e.phone,
+        (e.addr || '').replace(/,/g, ' '), e.dept, e.rank, e.join, e.salary, e.notes
+      ].map(v => `"${v || ''}"`).join(','));
+      const csv = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'employees.csv'; a.click();
+      URL.revokeObjectURL(url);
+      showToast('CSV exported!');
+    }
+
+    /* ── Init ── */
+    document.getElementById('nav-count').textContent = employees.length;
+    renderDashboard();
+
+    /* Close modal on overlay click */
+    document.getElementById('modal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+
+</html>
